@@ -53,10 +53,13 @@ class TaskBoard extends ConsumerWidget {
                 });
           }),
                       floatingActionButton: FloatingActionButton(
-              onPressed: () => Navigator.push(
+              onPressed: () {
+                    ref.read(taskIDProvider.notifier).state = '';
+                    Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AddTaskPage()),
-                  ),
+                    // MaterialPageRoute(builder: (context) => AddTaskPage()),
+                    MaterialPageRoute(builder: (context) => taskDetailPage()),
+                  );},
               tooltip: 'Increment',
               child: Icon(Icons.add),
             )

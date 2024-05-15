@@ -32,16 +32,20 @@ class AddTaskPage extends ConsumerWidget {
         ],
         title: const Text('Add Task'),
       ),
-      body: Center(
+      body: Padding(
+        padding: EdgeInsets.all(16.0),child:Center(
+          child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextField(
             controller: taskTitle,
+            decoration: InputDecoration(labelText: 'Task Name'),
           ),
           const SizedBox(height: 20.0),
           TextField(
             controller: taskBody,
+            decoration: InputDecoration(labelText: 'Task Detail'),
           ),
           const SizedBox(height: 20.0),
           ElevatedButton(
@@ -56,7 +60,7 @@ class AddTaskPage extends ConsumerWidget {
               child: const Text('追加する')),
         ],
       )),
-    );
+    )));
   }
 }
 

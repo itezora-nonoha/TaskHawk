@@ -49,7 +49,43 @@ class taskDetailPage extends ConsumerWidget {
             decoration: InputDecoration(labelText: 'Task Detail'),
           ),
           const SizedBox(height: 20.0),
-          ElevatedButton(
+          buttons(taskID, dataService, taskTitle, taskBody, context),
+          // ElevatedButton(
+          //     onPressed: () async {
+          //       // データを保存するメソッドを使用する。ボタンを押すと実行される
+          //       dataService.updateTask(taskID, taskTitle.text, taskBody.text, 'status', 'supplier', context);
+          //       // ブログの投稿ページへ画面遷移する
+          //       Navigator.of(context).pop();
+          //       // Navigator.of(context).push(
+          //           // MaterialPageRoute(builder: (context) => const TaskBoard()));
+          //     },
+          //     child: const Text('更新する')),
+          // const SizedBox(height: 20.0),
+          // ElevatedButton(
+          //     onPressed: () async {
+          //       dataService.deleteTask(taskID, context);
+          //       Navigator.of(context).pop();
+          //     },
+          //     child: const Text('削除する')),
+        ],
+      )),
+    ));
+  }
+}
+
+// void main() => runApp(MyApp());
+Widget buttons(String taskID, DataService dataService, TextEditingController taskTitle, TextEditingController taskBody, BuildContext context){
+  if (taskID == ''){
+    return ElevatedButton(
+              onPressed: () async {
+                dataService.addTask(taskTitle.text, taskBody.text, 'status', 'supplier', context);
+                Navigator.of(context).pop();
+                // Navigator.of(context).push(
+                    // MaterialPageRoute(builder: (context) => const TaskBoard()));
+              },
+              child: const Text('追加する'));
+  } else {
+    return Column(children:[ElevatedButton(
               onPressed: () async {
                 // データを保存するメソッドを使用する。ボタンを押すと実行される
                 dataService.updateTask(taskID, taskTitle.text, taskBody.text, 'status', 'supplier', context);
@@ -66,10 +102,5 @@ class taskDetailPage extends ConsumerWidget {
                 Navigator.of(context).pop();
               },
               child: const Text('削除する')),
-        ],
-      )),
-    ));
-  }
+  ]);}
 }
-
-// void main() => runApp(MyApp());
