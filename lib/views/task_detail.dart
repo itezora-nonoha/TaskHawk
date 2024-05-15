@@ -59,6 +59,13 @@ class taskDetailPage extends ConsumerWidget {
                     // MaterialPageRoute(builder: (context) => const TaskBoard()));
               },
               child: const Text('更新する')),
+          const SizedBox(height: 20.0),
+          ElevatedButton(
+              onPressed: () async {
+                dataService.deleteTask(taskID, context);
+                Navigator.of(context).pop();
+              },
+              child: const Text('削除する')),
         ],
       )),
     ));

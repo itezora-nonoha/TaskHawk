@@ -24,7 +24,7 @@ class DataService {
 
       // uid取得する変数
       final taskID = DateTime.now().toIso8601String();
-      final userID = auth.currentUser?.uid;
+      final uid = auth.currentUser?.uid;
       // Freezedのモデルクラスで定義した型を使ってデータを保存する
       final newTask = Task(
           id: taskID,
@@ -32,7 +32,7 @@ class DataService {
           body: body,
           status: status,
           supplier: supplier,
-          createUser: userID.toString(),
+          createUser: uid.toString(),
           createdAt: DateTime.now());
 
       await db.collection('tasks').doc(taskID).set(newTask.toJson());
@@ -56,12 +56,11 @@ class DataService {
     }
   }
 
-  
-  // Firestoreにデータを保存するメソッド
+  // タスクを更新する
   Future<void> updateTask(String taskID, String title, String body, String status, String supplier, BuildContext context) async {
     try {
       // uid取得する変数
-      final userID = auth.currentUser?.uid;
+      final uid = auth.currentUser?.uid;
       // Freezedのモデルクラスで定義した型を使ってデータを保存する
       final newTask = Task(
           id: taskID,
@@ -69,10 +68,34 @@ class DataService {
           body: body,
           status: status,
           supplier: supplier,
-          createUser: userID.toString()
+          createUser: uid.toString()
           );
 
       await db.collection('tasks').doc(taskID).update(newTask.toJson());
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              // throwのエラーメッセージがダイアログで表示される.
+              title: Text(e.toString()),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  // タスクを削除する
+  Future<void> deleteTask(String taskID, BuildContext context) async {
+    try {
+      await db.collection('tasks').doc(taskID).delete();
     } catch (e) {
       showDialog(
           context: context,
