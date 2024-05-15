@@ -1,44 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taskhawk/views/add_task.dart';
+import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
 
-class EmailPasswordLoginPage extends StatefulWidget {
-  @override
-  _EmailPasswordLoginPageState createState() => _EmailPasswordLoginPageState();
-}
+final userIDProvider = StateProvider((ref) => ''); 
 
-class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false;
+class HomePage extends StatelessWidget {
+  final User? user;
 
-  Future<void> _signInWithEmailAndPassword() async {
-    setState(() {
-      _isLoading = true;
-    });
-    try {
-      final UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-      print('User logged in: ${userCredential.user!.uid}');
-      // ログイン成功時の処理を追加する（例：ホーム画面に遷移するなど）
-    } on FirebaseAuthException catch (e) {
-      print('<${e.code}> ${e.message}');
-    } catch (e) {
-      print(e);
-    }
-    setState(() {
-      _isLoading = false;
-    });
-  }
+  HomePage({this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Email Password Login'),
+        title: Text('Home'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Welcome, ${user!.email}!',
+              style: TextStyle(fontSize: 20.0),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              child: Text('ログアウト'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
@@ -58,15 +72,68 @@ class _EmailPasswordLoginPageState extends State<EmailPasswordLoginPage> {
               obscureText: true,
             ),
             SizedBox(height: 24.0),
-            _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : ElevatedButton(
-                    onPressed: _signInWithEmailAndPassword,
-                    child: Text('Login'),
-                  ),
+            ElevatedButton(
+              onPressed: () async {
+                // ログイン処理を追加
+                // 例：Firebase Authenticationのログイン処理を行い、成功したらHomePageに遷移
+                try {
+                  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text.trim(),
+                  );
+                  Navigator.push(
+                    context,
+                    // MaterialPageRoute(builder: (context) => HomePage(user: userCredential.user)),
+                    MaterialPageRoute(builder: (context) => AddTaskPage()),
+                  );
+                } on FirebaseAuthException catch (e) {
+                  print('<${e.code}> ${e.message}');
+                } catch (e) {
+                  print(e);
+                }
+              },
+              child: Text('ログイン'),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+}
+
+
+class AuthenticationWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          User? user = snapshot.data;
+          if (user == null) {
+            // ログインしていない場合はログインページを表示
+            return LoginPage();
+          } else {
+            // ログイン済みの場合はホーム画面を表示
+            // return HomePage(user: user);
+            return TaskBoard();
+          }
+        } else {
+          // 接続中の場合はローディングスピナーを表示
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -75,7 +142,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MaterialApp(
-    home: EmailPasswordLoginPage(),
-  ));
+  runApp(
+    ProviderScope(
+      child: MyApp()
+    )
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Firebase Authentication',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: AuthenticationWrapper(),
+    );
+  }
 }
