@@ -55,6 +55,8 @@ class TaskBoard extends ConsumerWidget {
                       floatingActionButton: FloatingActionButton(
               onPressed: () {
                     ref.read(taskIDProvider.notifier).state = '';
+                    ref.read(taskDetailtitleProvider.notifier).state = TextEditingController(text: '');
+                    ref.read(taskDetailbodyProvider.notifier).state = TextEditingController(text: '');
                     Navigator.push(
                     context,
                     // MaterialPageRoute(builder: (context) => AddTaskPage()),
