@@ -6,7 +6,7 @@ import 'package:taskhawk/views/add_task.dart';
 import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
 
-final userIDProvider = StateProvider((ref) => ''); 
+final userIDProvider = StateProvider((ref) => '');
 
 class HomePage extends StatelessWidget {
   final User? user;
@@ -83,7 +83,8 @@ class LoginPage extends ConsumerWidget {
                 // ログイン処理を追加
                 // 例：Firebase Authenticationのログイン処理を行い、成功したらHomePageに遷移
                 try {
-                  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  UserCredential userCredential =
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: _emailController.text.trim(),
                     password: _passwordController.text.trim(),
                   );
@@ -113,7 +114,6 @@ class LoginPage extends ConsumerWidget {
   //   super.dispose();
   // }
 }
-
 
 class AuthenticationWrapper extends StatelessWidget {
   @override
@@ -148,11 +148,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(
-    ProviderScope(
-      child: MyApp()
-    )
-  );
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

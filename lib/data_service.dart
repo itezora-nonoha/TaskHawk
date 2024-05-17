@@ -7,12 +7,12 @@ import 'package:taskhawk/models/task.dart';
 final dataServiceProvider = StateProvider<DataService>((ref) => DataService());
 
 class DataService {
-  
   final db = FirebaseFirestore.instance;
   final auth = FirebaseAuth.instance;
-  
+
   // Firestoreにデータを保存するメソッド
-  Future<void> addTask(String title, String body, String status, String supplier, BuildContext context) async {
+  Future<void> addTask(String title, String body, String status,
+      String supplier, BuildContext context) async {
     try {
       if (title.isEmpty) {
         throw ('タイトルが入力されていません!');
@@ -57,7 +57,8 @@ class DataService {
   }
 
   // タスクを更新する
-  Future<void> updateTask(String taskID, String title, String body, String status, String supplier, BuildContext context) async {
+  Future<void> updateTask(String taskID, String title, String body,
+      String status, String supplier, BuildContext context) async {
     try {
       // uid取得する変数
       final uid = auth.currentUser?.uid;
@@ -68,8 +69,7 @@ class DataService {
           body: body,
           status: status,
           supplier: supplier,
-          createUser: uid.toString()
-          );
+          createUser: uid.toString());
 
       await db.collection('tasks').doc(taskID).update(newTask.toJson());
     } catch (e) {
