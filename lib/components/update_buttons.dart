@@ -14,6 +14,8 @@ class UpdateButtons extends ConsumerWidget {
     final taskTitle = ref.read(taskDetailTitleProvider.notifier).state;
     final taskBody = ref.read(taskDetailBodyProvider.notifier).state;
     final supplier = ref.read(taskDetailSupplierProvider.notifier).state;
+    final dueDate = ref.read(taskDetailDueDateProvider.notifier).state;
+
     ref.watch(taskDetailSupplierProvider);
     String pageType = '';
 
@@ -26,8 +28,8 @@ class UpdateButtons extends ConsumerWidget {
     if (pageType == 'add') {
       return ElevatedButton(
           onPressed: () async {
-            dataService.addTask(
-                taskTitle.text, taskBody.text, 'status', supplier, context);
+            dataService.addTask(taskTitle.text, taskBody.text, 'status',
+                supplier, dueDate.text, context);
             Navigator.of(context).pop();
           },
           child: const Text('追加する'));
@@ -36,7 +38,7 @@ class UpdateButtons extends ConsumerWidget {
         ElevatedButton(
             onPressed: () async {
               dataService.updateTask(taskID, taskTitle.text, taskBody.text,
-                  'status', supplier, context);
+                  'status', supplier, dueDate.text, context);
               Navigator.of(context).pop();
             },
             child: const Text('更新する')),

@@ -12,7 +12,7 @@ class DataService {
 
   // Firestoreにデータを保存するメソッド
   Future<void> addTask(String title, String body, String status,
-      String supplier, BuildContext context) async {
+      String supplier, String dueDate, BuildContext context) async {
     try {
       if (title.isEmpty) {
         throw ('タイトルが入力されていません!');
@@ -32,6 +32,7 @@ class DataService {
           body: body,
           status: status,
           supplier: supplier,
+          dueDate: dueDate,
           createUser: uid.toString(),
           createdAt: DateTime.now());
 
@@ -57,8 +58,14 @@ class DataService {
   }
 
   // タスクを更新する
-  Future<void> updateTask(String taskID, String title, String body,
-      String status, String supplier, BuildContext context) async {
+  Future<void> updateTask(
+      String taskID,
+      String title,
+      String body,
+      String status,
+      String supplier,
+      String dueDate,
+      BuildContext context) async {
     try {
       // uid取得する変数
       final uid = auth.currentUser?.uid;
@@ -69,6 +76,7 @@ class DataService {
           body: body,
           status: status,
           supplier: supplier,
+          dueDate: dueDate,
           createUser: uid.toString());
 
       await db.collection('tasks').doc(taskID).update(newTask.toJson());

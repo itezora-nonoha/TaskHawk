@@ -41,7 +41,7 @@ class TaskBoard extends ConsumerWidget {
                     final task = taskData[index];
                     return ListTile(
                       title: Text(task.title),
-                      subtitle: Text(task.body),
+                      subtitle: Text(task.dueDate),
                       // subtitle: Text('test'),
                       onTap: () {
                         // final titleController = ref.read(taskDetailtitleProvider.notifier);
@@ -53,6 +53,8 @@ class TaskBoard extends ConsumerWidget {
                             TextEditingController(text: task.body);
                         ref.read(taskDetailSupplierProvider.notifier).state =
                             task.supplier;
+                        ref.read(taskDetailDueDateProvider.notifier).state =
+                            TextEditingController(text: task.dueDate);
 
                         Navigator.push(
                             context,
@@ -70,11 +72,10 @@ class TaskBoard extends ConsumerWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             ref.read(taskIDProvider.notifier).state = '';
-            ref.read(taskDetailTitleProvider.notifier).state =
-                TextEditingController(text: '');
-            ref.read(taskDetailBodyProvider.notifier).state =
-                TextEditingController(text: '');
+            ref.read(taskDetailTitleProvider.notifier).state.text = '';
+            ref.read(taskDetailBodyProvider.notifier).state.text = '';
             ref.read(taskDetailSupplierProvider.notifier).state = '';
+            ref.read(taskDetailDueDateProvider.notifier).state.text = '';
             Navigator.push(
               context,
               // MaterialPageRoute(builder: (context) => AddTaskPage()),

@@ -13,6 +13,8 @@ final taskDetailTitleProvider =
 final taskDetailBodyProvider =
     StateProvider((ref) => TextEditingController(text: ''));
 final taskDetailSupplierProvider = StateProvider((ref) => '');
+final taskDetailDueDateProvider =
+    StateProvider((ref) => TextEditingController(text: ''));
 
 class TaskDetailPage extends ConsumerWidget {
   const TaskDetailPage({Key? key}) : super(key: key);
@@ -25,6 +27,29 @@ class TaskDetailPage extends ConsumerWidget {
     final taskID = ref.read(taskIDProvider);
     final taskTitle = ref.watch(taskDetailTitleProvider);
     final taskBody = ref.watch(taskDetailBodyProvider);
+    final taskDueDate = ref.watch(taskDetailDueDateProvider);
+
+    DateTime _date = new DateTime.now();
+
+    // ボタン押下時のイベント
+    void onPressedRaisedButton() async {
+      String initialDateStr = taskDueDate.text;
+      if (initialDateStr == '') {
+        initialDateStr = DateTime.now().toString().split(' ')[0];
+      }
+      final DateTime? picked = await showDatePicker(
+          locale: const Locale("ja"),
+          context: context,
+          initialDate: DateTime.parse(initialDateStr),
+          firstDate: new DateTime(2024),
+          lastDate: new DateTime.now().add(new Duration(days: 360)));
+
+      if (picked != null) {
+        // 日時反映
+        ref.read(taskDetailDueDateProvider.notifier).state.text =
+            picked.toString().split(' ')[0];
+      }
+    }
 
     return Scaffold(
         appBar: AppBar(
@@ -47,6 +72,11 @@ class TaskDetailPage extends ConsumerWidget {
                 controller: taskBody,
                 decoration: InputDecoration(labelText: 'Task Detail'),
               ),
+              const SizedBox(height: 20.0),
+              TextField(
+                  controller: taskDueDate,
+                  decoration: InputDecoration(labelText: 'Due Date')),
+              TextButton(onPressed: onPressedRaisedButton, child: Text('日付選択')),
               const SizedBox(height: 20.0),
               SupplierChoices(),
               const SizedBox(height: 20.0),

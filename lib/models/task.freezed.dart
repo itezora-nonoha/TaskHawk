@@ -25,6 +25,7 @@ mixin _$Task {
   String get body => throw _privateConstructorUsedError;
   String get status => throw _privateConstructorUsedError;
   String get supplier => throw _privateConstructorUsedError;
+  String get dueDate => throw _privateConstructorUsedError;
   String get createUser => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -45,6 +46,7 @@ abstract class $TaskCopyWith<$Res> {
       String body,
       String status,
       String supplier,
+      String dueDate,
       String createUser,
       @TimestampConverter() DateTime? createdAt});
 }
@@ -67,6 +69,7 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? body = null,
     Object? status = null,
     Object? supplier = null,
+    Object? dueDate = null,
     Object? createUser = null,
     Object? createdAt = freezed,
   }) {
@@ -90,6 +93,10 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
       supplier: null == supplier
           ? _value.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
+              as String,
+      dueDate: null == dueDate
+          ? _value.dueDate
+          : dueDate // ignore: cast_nullable_to_non_nullable
               as String,
       createUser: null == createUser
           ? _value.createUser
@@ -116,6 +123,7 @@ abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
       String body,
       String status,
       String supplier,
+      String dueDate,
       String createUser,
       @TimestampConverter() DateTime? createdAt});
 }
@@ -135,6 +143,7 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? body = null,
     Object? status = null,
     Object? supplier = null,
+    Object? dueDate = null,
     Object? createUser = null,
     Object? createdAt = freezed,
   }) {
@@ -159,6 +168,10 @@ class __$$TaskImplCopyWithImpl<$Res>
           ? _value.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
               as String,
+      dueDate: null == dueDate
+          ? _value.dueDate
+          : dueDate // ignore: cast_nullable_to_non_nullable
+              as String,
       createUser: null == createUser
           ? _value.createUser
           : createUser // ignore: cast_nullable_to_non_nullable
@@ -180,6 +193,7 @@ class _$TaskImpl implements _Task {
       required this.body,
       required this.status,
       required this.supplier,
+      required this.dueDate,
       required this.createUser,
       @TimestampConverter() this.createdAt});
 
@@ -197,6 +211,8 @@ class _$TaskImpl implements _Task {
   @override
   final String supplier;
   @override
+  final String dueDate;
+  @override
   final String createUser;
   @override
   @TimestampConverter()
@@ -204,7 +220,7 @@ class _$TaskImpl implements _Task {
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, body: $body, status: $status, supplier: $supplier, createUser: $createUser, createdAt: $createdAt)';
+    return 'Task(id: $id, title: $title, body: $body, status: $status, supplier: $supplier, dueDate: $dueDate, createUser: $createUser, createdAt: $createdAt)';
   }
 
   @override
@@ -218,6 +234,7 @@ class _$TaskImpl implements _Task {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.supplier, supplier) ||
                 other.supplier == supplier) &&
+            (identical(other.dueDate, dueDate) || other.dueDate == dueDate) &&
             (identical(other.createUser, createUser) ||
                 other.createUser == createUser) &&
             (identical(other.createdAt, createdAt) ||
@@ -226,8 +243,8 @@ class _$TaskImpl implements _Task {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, title, body, status, supplier, createUser, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, title, body, status,
+      supplier, dueDate, createUser, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -250,6 +267,7 @@ abstract class _Task implements Task {
       required final String body,
       required final String status,
       required final String supplier,
+      required final String dueDate,
       required final String createUser,
       @TimestampConverter() final DateTime? createdAt}) = _$TaskImpl;
 
@@ -265,6 +283,8 @@ abstract class _Task implements Task {
   String get status;
   @override
   String get supplier;
+  @override
+  String get dueDate;
   @override
   String get createUser;
   @override

@@ -13,6 +13,7 @@ class Task with _$Task {
     required String body,
     required String status,
     required String supplier,
+    required String dueDate,
     required String createUser,
     @TimestampConverter() DateTime? createdAt,
   }) = _Task;

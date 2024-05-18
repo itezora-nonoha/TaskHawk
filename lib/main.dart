@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 final userIDProvider = StateProvider((ref) => '');
 
 class HomePage extends StatelessWidget {
@@ -163,6 +165,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: AuthenticationWrapper(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale("en"),
+        const Locale("ja"),
+      ],
     );
   }
 }
