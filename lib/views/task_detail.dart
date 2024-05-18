@@ -7,13 +7,14 @@ import 'package:taskhawk/models/user_config.dart';
 import 'package:taskhawk/repository/config_provider.dart';
 
 final taskIDProvider = StateProvider((ref) => '');
-final choiceIndexProvider = StateProvider((ref) => -1);
+// final choiceIndexProvider = StateProvider((ref) => '');
 // final supplierList = ['A社', 'B社', 'C社'];
 final supplierListProvider = StateProvider((ref) => ['blank']);
-final taskDetailtitleProvider =
+final taskDetailTitleProvider =
     StateProvider((ref) => TextEditingController(text: ''));
-final taskDetailbodyProvider =
+final taskDetailBodyProvider =
     StateProvider((ref) => TextEditingController(text: ''));
+final taskDetailSupplierProvider = StateProvider((ref) => '');
 
 class TaskDetailPage extends ConsumerWidget {
   const TaskDetailPage({Key? key}) : super(key: key);
@@ -24,8 +25,8 @@ class TaskDetailPage extends ConsumerWidget {
     // final authController = ref.read(authAsyncNotifierController.notifier);
 
     final taskID = ref.read(taskIDProvider);
-    final taskTitle = ref.watch(taskDetailtitleProvider);
-    final taskBody = ref.watch(taskDetailbodyProvider);
+    final taskTitle = ref.watch(taskDetailTitleProvider);
+    final taskBody = ref.watch(taskDetailBodyProvider);
 
     final dataService = ref.read(dataServiceProvider.notifier).state;
 
@@ -61,7 +62,8 @@ class TaskDetailPage extends ConsumerWidget {
               const SizedBox(height: 20.0),
               SupplierChoices(),
               const SizedBox(height: 20.0),
-              _buttons(taskID, dataService, taskTitle, taskBody, context),
+              UpdateButtons(),
+              // _buttons(taskID, dataService, taskTitle, taskBody, context, ref),
               // ElevatedButton(
               //     onPressed: () async {
               //       // データを保存するメソッドを使用する。ボタンを押すと実行される
@@ -105,7 +107,7 @@ class SupplierChoices extends ConsumerWidget {
     List<String> supplierList = ref.watch(supplierListProvider.notifier).state;
     // ref.watch(choiceIndexProvider.notifier).state;
     // print(userConfigData);
-    ref.watch(choiceIndexProvider);
+    ref.watch(taskDetailSupplierProvider);
     // final taskTitle = ref.watch(choiceIndexProvider);
     return userConfigData.when(
       // データを読み込んでいるとローディングの処理がされる
@@ -116,15 +118,16 @@ class SupplierChoices extends ConsumerWidget {
       data: (userConfigData) {
         supplierList = userConfigData[0].supplierList;
         return Wrap(spacing: 10, children: [
-          for (int i = 0; i < supplierList.length; i++)
+          for (var supplier in supplierList)
             ChoiceChip(
               labelStyle: TextStyle(color: Colors.white),
-              label: Text(supplierList[i]),
-              selected: ref.read(choiceIndexProvider.notifier).state == i,
+              label: Text(supplier),
+              selected: ref.read(taskDetailSupplierProvider.notifier).state ==
+                  supplier,
               selectedColor: Colors.lightBlue,
               backgroundColor: Colors.grey,
               onSelected: (_) {
-                ref.read(choiceIndexProvider.notifier).state = i;
+                ref.watch(taskDetailSupplierProvider.notifier).state = supplier;
               },
               showCheckmark: false,
             )
@@ -134,42 +137,49 @@ class SupplierChoices extends ConsumerWidget {
   }
 }
 
-Widget _buttons(
-    String taskID,
-    DataService dataService,
-    TextEditingController taskTitle,
-    TextEditingController taskBody,
-    BuildContext context) {
-  if (taskID == '') {
-    return ElevatedButton(
-        onPressed: () async {
-          dataService.addTask(
-              taskTitle.text, taskBody.text, 'status', 'supplier', context);
-          Navigator.of(context).pop();
-          // Navigator.of(context).push(
-          // MaterialPageRoute(builder: (context) => const TaskBoard()));
-        },
-        child: const Text('追加する'));
-  } else {
-    return Column(children: [
-      ElevatedButton(
+class UpdateButtons extends ConsumerWidget {
+  const UpdateButtons({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final taskID = ref.read(taskIDProvider.notifier).state;
+    final dataService = ref.read(dataServiceProvider.notifier).state;
+    final taskTitle = ref.read(taskDetailTitleProvider.notifier).state;
+    final taskBody = ref.read(taskDetailBodyProvider.notifier).state;
+    final supplier = ref.read(taskDetailSupplierProvider.notifier).state;
+    ref.watch(taskDetailSupplierProvider);
+
+    if (taskID == '') {
+      return ElevatedButton(
           onPressed: () async {
-            // データを保存するメソッドを使用する。ボタンを押すと実行される
-            dataService.updateTask(taskID, taskTitle.text, taskBody.text,
-                'status', 'supplier', context);
-            // ブログの投稿ページへ画面遷移する
+            dataService.addTask(
+                taskTitle.text, taskBody.text, 'status', supplier, context);
             Navigator.of(context).pop();
             // Navigator.of(context).push(
             // MaterialPageRoute(builder: (context) => const TaskBoard()));
           },
-          child: const Text('更新する')),
-      const SizedBox(height: 20.0),
-      ElevatedButton(
-          onPressed: () async {
-            dataService.deleteTask(taskID, context);
-            Navigator.of(context).pop();
-          },
-          child: const Text('削除する')),
-    ]);
+          child: const Text('追加する'));
+    } else {
+      return Column(children: [
+        ElevatedButton(
+            onPressed: () async {
+              // データを保存するメソッドを使用する。ボタンを押すと実行される
+              dataService.updateTask(taskID, taskTitle.text, taskBody.text,
+                  'status', supplier, context);
+              // ブログの投稿ページへ画面遷移する
+              Navigator.of(context).pop();
+              // Navigator.of(context).push(
+              // MaterialPageRoute(builder: (context) => const TaskBoard()));
+            },
+            child: const Text('更新する')),
+        const SizedBox(height: 20.0),
+        ElevatedButton(
+            onPressed: () async {
+              dataService.deleteTask(taskID, context);
+              Navigator.of(context).pop();
+            },
+            child: const Text('削除する')),
+      ]);
+    }
   }
 }

@@ -39,10 +39,12 @@ class TaskBoard extends ConsumerWidget {
                         // final titleController = ref.read(taskDetailtitleProvider.notifier);
                         // ref.read(testProvider.notifier).state = task.title;
                         ref.read(taskIDProvider.notifier).state = task.id;
-                        ref.read(taskDetailtitleProvider.notifier).state =
+                        ref.read(taskDetailTitleProvider.notifier).state =
                             TextEditingController(text: task.title);
-                        ref.read(taskDetailbodyProvider.notifier).state =
+                        ref.read(taskDetailBodyProvider.notifier).state =
                             TextEditingController(text: task.body);
+                        ref.read(taskDetailSupplierProvider.notifier).state =
+                            task.supplier;
 
                         Navigator.push(
                             context,
@@ -60,10 +62,11 @@ class TaskBoard extends ConsumerWidget {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             ref.read(taskIDProvider.notifier).state = '';
-            ref.read(taskDetailtitleProvider.notifier).state =
+            ref.read(taskDetailTitleProvider.notifier).state =
                 TextEditingController(text: '');
-            ref.read(taskDetailbodyProvider.notifier).state =
+            ref.read(taskDetailBodyProvider.notifier).state =
                 TextEditingController(text: '');
+            ref.read(taskDetailSupplierProvider.notifier).state = '';
             Navigator.push(
               context,
               // MaterialPageRoute(builder: (context) => AddTaskPage()),
