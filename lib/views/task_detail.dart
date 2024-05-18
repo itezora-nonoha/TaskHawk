@@ -4,6 +4,8 @@ import 'package:taskhawk/data_service.dart';
 import 'package:taskhawk/views/task_board.dart';
 
 final taskIDProvider = StateProvider((ref) => '');
+final choiceIndexProvider = StateProvider((ref) => 0);
+final supplierList = ['A社', 'B社', 'C社'];
 final taskDetailtitleProvider =
     StateProvider((ref) => TextEditingController(text: ''));
 final taskDetailbodyProvider =
@@ -25,6 +27,8 @@ class TaskDetailPage extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.lightBlue,
           actions: [
             IconButton(
                 onPressed: () async {
@@ -50,7 +54,8 @@ class TaskDetailPage extends ConsumerWidget {
                 controller: taskBody,
                 decoration: InputDecoration(labelText: 'Task Detail'),
               ),
-
+              const SizedBox(height: 20.0),
+              SupplierChoices(),
               const SizedBox(height: 20.0),
               _buttons(taskID, dataService, taskTitle, taskBody, context),
               // ElevatedButton(
@@ -83,6 +88,32 @@ Widget _pageTitle(String taskID) {
     return Text('Add Task');
   } else {
     return Text('Task Detail');
+  }
+}
+
+
+class SupplierChoices extends ConsumerWidget {
+  const SupplierChoices({Key? key}) : super(key: key);
+
+  // var _choiceIndex = ref.read(choiceIndexProvider.notifier).state;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final taskTitle = ref.watch(choiceIndexProvider);
+    return Wrap(
+      spacing: 10,
+      children: [
+        for (int i = 0; i < supplierList.length; i++)
+          ChoiceChip(
+            labelStyle: TextStyle(color: Colors.white),
+            label: Text(supplierList[i]),
+            selected: ref.read(choiceIndexProvider.notifier).state == i,
+            selectedColor: Colors.lightBlue,
+            backgroundColor: Colors.grey,
+            onSelected: (_) {ref.read(choiceIndexProvider.notifier).state = i;},
+            showCheckmark: false,
+          ),
+      ],
+    );
   }
 }
 

@@ -16,6 +16,8 @@ class TaskBoard extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.lightBlue,
           title: const Text('Task Board'),
         ),
         body: taskData.when(

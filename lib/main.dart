@@ -58,6 +58,8 @@ class LoginPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.lightBlue,
         title: Text('Login'),
       ),
       body: Padding(
