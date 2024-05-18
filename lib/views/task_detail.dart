@@ -33,14 +33,6 @@ class TaskDetailPage extends ConsumerWidget {
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: Colors.lightBlue,
-          actions: [
-            IconButton(
-                onPressed: () async {
-                  // ログアウトするメソッド
-                  // authController.signOutAnonymously(context);
-                },
-                icon: const Icon(Icons.logout))
-          ],
           title: _pageTitle(taskID),
         ),
         body: Padding(
