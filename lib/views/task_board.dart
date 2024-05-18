@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskhawk/repository/task_provider.dart';
 import 'package:taskhawk/views/add_task.dart';
@@ -6,8 +7,6 @@ import 'package:taskhawk/views/task_detail.dart';
 
 class TaskBoard extends ConsumerWidget {
   const TaskBoard({Key? key}) : super(key: key);
-
-  void _onTapTask(String taskID) {}
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,6 +17,16 @@ class TaskBoard extends ConsumerWidget {
         appBar: AppBar(
           foregroundColor: Colors.white,
           backgroundColor: Colors.lightBlue,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  FirebaseAuth.instance.signOut();
+                  // ログアウトするメソッド
+                  // authController.signOutAnonymously(context);
+                },
+                icon: const Icon(Icons.logout),
+                tooltip: 'ログアウト')
+          ],
           title: const Text('Task Board'),
         ),
         body: taskData.when(
@@ -73,7 +82,7 @@ class TaskBoard extends ConsumerWidget {
               MaterialPageRoute(builder: (context) => TaskDetailPage()),
             );
           },
-          tooltip: 'Increment',
+          tooltip: 'タスクの追加',
           child: Icon(Icons.add),
         ));
   }

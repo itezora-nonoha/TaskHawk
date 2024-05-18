@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:taskhawk/views/add_task.dart';
 import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
 import 'package:taskhawk/repository/config_provider.dart';
@@ -96,7 +95,7 @@ class LoginPage extends ConsumerWidget {
                   Navigator.push(
                     context,
                     // MaterialPageRoute(builder: (context) => HomePage(user: userCredential.user)),
-                    MaterialPageRoute(builder: (context) => AddTaskPage()),
+                    MaterialPageRoute(builder: (context) => TaskBoard()),
                   );
                 } on FirebaseAuthException catch (e) {
                   print('<${e.code}> ${e.message}');
