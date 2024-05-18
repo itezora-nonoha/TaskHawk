@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskhawk/views/add_task.dart';
 import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
+import 'package:taskhawk/repository/config_provider.dart';
 
 final userIDProvider = StateProvider((ref) => '');
 
@@ -90,6 +91,8 @@ class LoginPage extends ConsumerWidget {
                     email: _emailController.text.trim(),
                     password: _passwordController.text.trim(),
                   );
+
+                  // 画面遷移
                   Navigator.push(
                     context,
                     // MaterialPageRoute(builder: (context) => HomePage(user: userCredential.user)),

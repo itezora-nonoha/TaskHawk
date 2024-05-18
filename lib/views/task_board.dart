@@ -43,6 +43,7 @@ class TaskBoard extends ConsumerWidget {
                             TextEditingController(text: task.title);
                         ref.read(taskDetailbodyProvider.notifier).state =
                             TextEditingController(text: task.body);
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
