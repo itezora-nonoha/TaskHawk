@@ -4,7 +4,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskhawk/views/task_board.dart';
 import 'firebase_options.dart';
-import 'package:taskhawk/repository/config_provider.dart';
 
 final userIDProvider = StateProvider((ref) => '');
 
@@ -85,8 +84,8 @@ class LoginPage extends ConsumerWidget {
                 // ログイン処理を追加
                 // 例：Firebase Authenticationのログイン処理を行い、成功したらHomePageに遷移
                 try {
-                  UserCredential userCredential =
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  // UserCredential userCredential =
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
                     email: _emailController.text.trim(),
                     password: _passwordController.text.trim(),
                   );
