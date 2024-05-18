@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:taskhawk/repository/task_provider.dart';
+import 'package:taskhawk/views/supplier_list.dart';
 import 'package:taskhawk/views/task_detail.dart';
 
 class TaskBoard extends ConsumerWidget {
@@ -17,6 +18,15 @@ class TaskBoard extends ConsumerWidget {
           foregroundColor: Colors.white,
           backgroundColor: Colors.lightBlue,
           actions: [
+            IconButton(
+                onPressed: () async {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SupplierListPage()),
+                  );
+                },
+                icon: const Icon(Icons.menu),
+                tooltip: '依頼元リスト'),
             IconButton(
                 onPressed: () async {
                   FirebaseAuth.instance.signOut();

@@ -1,7 +1,10 @@
+import 'dart:js_interop';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:taskhawk/models/user_config.dart';
 import 'package:taskhawk/models/task.dart';
 
 final dataServiceProvider = StateProvider<DataService>((ref) => DataService());
@@ -104,6 +107,37 @@ class DataService {
   Future<void> deleteTask(String taskID, BuildContext context) async {
     try {
       await db.collection('tasks').doc(taskID).delete();
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              // throwのエラーメッセージがダイアログで表示される.
+              title: Text(e.toString()),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  // タスクを更新する
+  Future<void> updateUserConfig(
+      List<String> supplierList, BuildContext context) async {
+    try {
+      final uid = auth.currentUser?.uid;
+      final userConfig = UserConfig(
+        uid: uid.toString(),
+        supplierList: supplierList,
+      );
+
+      await db.collection('user_config').doc(uid).update(userConfig.toJson());
     } catch (e) {
       showDialog(
           context: context,

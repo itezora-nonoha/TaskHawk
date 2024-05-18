@@ -7,7 +7,7 @@ import 'package:taskhawk/repository/config_provider.dart';
 final taskIDProvider = StateProvider((ref) => '');
 // final choiceIndexProvider = StateProvider((ref) => '');
 // final supplierList = ['A社', 'B社', 'C社'];
-final supplierListProvider = StateProvider((ref) => ['blank']);
+final supplierListProvider = StateProvider<List<String>>((ref) => ['blank']);
 final taskDetailTitleProvider =
     StateProvider((ref) => TextEditingController(text: ''));
 final taskDetailBodyProvider =
