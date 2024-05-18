@@ -4,12 +4,10 @@ import 'package:taskhawk/data_service.dart';
 import 'package:taskhawk/views/task_board.dart';
 
 final taskIDProvider = StateProvider((ref) => '');
-final choiceIndexProvider = StateProvider((ref) => 0);
+final choiceIndexProvider = StateProvider((ref) => -1);
 final supplierList = ['A社', 'B社', 'C社'];
-final taskDetailtitleProvider =
-    StateProvider((ref) => TextEditingController(text: ''));
-final taskDetailbodyProvider =
-    StateProvider((ref) => TextEditingController(text: ''));
+final taskDetailtitleProvider = StateProvider((ref) => TextEditingController(text: ''));
+final taskDetailbodyProvider = StateProvider((ref) => TextEditingController(text: ''));
 
 class TaskDetailPage extends ConsumerWidget {
   const TaskDetailPage({Key? key}) : super(key: key);
@@ -27,8 +25,8 @@ class TaskDetailPage extends ConsumerWidget {
 
     return Scaffold(
         appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.lightBlue,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.lightBlue,
           actions: [
             IconButton(
                 onPressed: () async {
@@ -45,10 +43,7 @@ class TaskDetailPage extends ConsumerWidget {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                  controller: taskTitle,
-                  decoration: InputDecoration(labelText: 'Task Name'),
-                  enabled: true),
+              TextField(controller: taskTitle, decoration: InputDecoration(labelText: 'Task Name'), enabled: true),
               const SizedBox(height: 20.0),
               TextField(
                 controller: taskBody,
@@ -91,7 +86,6 @@ Widget _pageTitle(String taskID) {
   }
 }
 
-
 class SupplierChoices extends ConsumerWidget {
   const SupplierChoices({Key? key}) : super(key: key);
 
@@ -109,7 +103,9 @@ class SupplierChoices extends ConsumerWidget {
             selected: ref.read(choiceIndexProvider.notifier).state == i,
             selectedColor: Colors.lightBlue,
             backgroundColor: Colors.grey,
-            onSelected: (_) {ref.read(choiceIndexProvider.notifier).state = i;},
+            onSelected: (_) {
+              ref.read(choiceIndexProvider.notifier).state = i;
+            },
             showCheckmark: false,
           ),
       ],
@@ -117,17 +113,11 @@ class SupplierChoices extends ConsumerWidget {
   }
 }
 
-Widget _buttons(
-    String taskID,
-    DataService dataService,
-    TextEditingController taskTitle,
-    TextEditingController taskBody,
-    BuildContext context) {
+Widget _buttons(String taskID, DataService dataService, TextEditingController taskTitle, TextEditingController taskBody, BuildContext context) {
   if (taskID == '') {
     return ElevatedButton(
         onPressed: () async {
-          dataService.addTask(
-              taskTitle.text, taskBody.text, 'status', 'supplier', context);
+          dataService.addTask(taskTitle.text, taskBody.text, 'status', 'supplier', context);
           Navigator.of(context).pop();
           // Navigator.of(context).push(
           // MaterialPageRoute(builder: (context) => const TaskBoard()));
@@ -138,8 +128,7 @@ Widget _buttons(
       ElevatedButton(
           onPressed: () async {
             // データを保存するメソッドを使用する。ボタンを押すと実行される
-            dataService.updateTask(taskID, taskTitle.text, taskBody.text,
-                'status', 'supplier', context);
+            dataService.updateTask(taskID, taskTitle.text, taskBody.text, 'status', 'supplier', context);
             // ブログの投稿ページへ画面遷移する
             Navigator.of(context).pop();
             // Navigator.of(context).push(
